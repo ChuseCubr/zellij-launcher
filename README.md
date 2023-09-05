@@ -2,6 +2,11 @@
 
 A customizable launcher for [Zellij](https://github.com/zellij-org/zellij) inspired by [ThePrimeagen's tmux sessionizer](https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/scripts/tmux-sessionizer) and [alex35mil's zellij-runner](https://github.com/alex35mil/dotfiles/tree/master/user/bin/zellij/runner).
 
+## Dependencies
+
+- [Zellij](https://github.com/zellij-org/zellij) (duh)
+- [fzf](https://github.com/junegunn/fzf)
+
 ## Installation and Usage
 
 Download the file `zellij-launcher` or paste its contents into your own file:
