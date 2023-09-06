@@ -53,6 +53,14 @@
 [[ -z "${ZELLIJ_LAUNCHER_DYNAMIC_EXIT+x}" ]] &&
 	ZELLIJ_LAUNCHER_DYNAMIC_EXIT=1
 
+# Applied when selecting a folder in the main menu whose name is already an
+# active sessions.
+# If nested and the selected folder name is the attached session,
+# will automatically be set to rename.
+# Possible values: "attach" | "rename" | "ask"
+[[ -z "${ZELLIJ_LAUNCHER_FOLDER_BEHAVIOR+x}" ]] &&
+	ZELLIJ_LAUNCHER_FOLDER_BEHAVIOR="ask"
+
 # Text always displayed in menus.
 # I recommend keeping this so Zellij gets exposure :)
 [[ -z "${ZELLIJ_LAUNCHER_BANNER+x}" ]] &&
@@ -379,18 +387,56 @@ zl() {
 			continue
 		fi
 
-		local name="$(
-			zl_session_name "$selection" \
-				"${all_sessions[*]}" \
-				"${header[*]}" \
-				"${fzf_opts_text[*]}"
-		)"
+		local location="$selection"
+		local name="${location##*/}"
+		if $(zl_array_in "${all_sessions[*]}" "$name"); then
+			local behavior="$ZELLIJ_LAUNCHER_FOLDER_BEHAVIOR"
+			if [[ "$current_session" == "$name" ]]; then
+				behavior="rename"
+			fi
+
+			if [[ "$behavior" == "ask" ]]; then
+				menu_list=("${header[@]}")
+				menu_list+=("${prefix}Attach to session")
+				menu_list+=("${prefix}Rename new session")
+				selection="$(
+					echo "${menu_list[*]}" |
+						fzf --prompt="'$name' is already an active session! " \
+							"${fzf_opts_select[@]}"
+				)"
+				case "$selection" in
+				"${prefix}Attach to session")
+					behavior="attach"
+					;;
+				"${prefix}Rename new session")
+					behavior="rename"
+					;;
+				esac
+			fi
+
+			case $behavior in
+			"attach")
+				recent_sessions=($(zl_array_remove "${recent_sessions[*]}" "$location"))
+				recent_sessions=("$location" "${recent_sessions[@]}")
+				zellij a "$name"
+				continue
+				;;
+			"rename")
+				local name="$(
+					zl_session_name "$location" \
+						"${all_sessions[*]}" \
+						"${header[*]}" \
+						"${fzf_opts_text[*]}"
+				)"
+				;;
+			esac
+		fi
 
 		[[ -z "$name" ]] && continue
 		recent_sessions=($(zl_array_remove "${recent_sessions[*]}" "$name"))
 		recent_sessions=("$name" "${recent_sessions[@]}")
 		local current_dir="$PWD"
-		cd "$selection" && zellij a -c "$name"
+		cd "$location" && zellij a -c "$name"
 		cd "$current_dir"
 	done
 }

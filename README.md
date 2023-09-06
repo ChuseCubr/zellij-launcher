@@ -71,6 +71,13 @@ ZELLIJ_LAUNCHER_RETURN_TO_LAST=1
 # is enabled.
 ZELLIJ_LAUNCHER_DYNAMIC_EXIT=1
 
+# Applied when selecting a folder in the main menu whose name is already an
+# active sessions.
+# If nested and the selected folder name is the attached session,
+# will automatically be set to rename.
+# Possible values: "attach" | "rename" | "ask"
+ZELLIJ_LAUNCHER_FOLDER_BEHAVIOR="ask"
+
 # Text always displayed in menus.
 # I recommend keeping this so Zellij gets exposure :)
 ZELLIJ_LAUNCHER_BANNER=" 
