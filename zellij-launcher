@@ -365,7 +365,7 @@ zl() {
 			[[ -z "$name" ]] && continue
 			recent_sessions=($(zl_array_remove "${recent_sessions[*]}" "$name"))
 			recent_sessions=("$name" "${recent_sessions[@]}")
-			local current_dir="$location"
+			local current_dir="$PWD"
 			cd "$selection" && zellij a -c "$name"
 			cd "$current_dir"
 			continue
@@ -389,7 +389,7 @@ zl() {
 		[[ -z "$name" ]] && continue
 		recent_sessions=($(zl_array_remove "${recent_sessions[*]}" "$name"))
 		recent_sessions=("$name" "${recent_sessions[@]}")
-		local current_dir="$location"
+		local current_dir="$PWD"
 		cd "$selection" && zellij a -c "$name"
 		cd "$current_dir"
 	done
