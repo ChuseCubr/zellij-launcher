@@ -158,13 +158,34 @@ zl_locations_get() {
 	local IFS=' '
 	local locations="${ZELLIJ_LAUNCHER_DIRS/\$PWD/$PWD}"
 	local locations=($locations)
-	local find_opts=(
-		"-mindepth" "$ZELLIJ_LAUNCHER_MIN_DIR_DEPTH"
-		"-maxdepth" "$ZELLIJ_LAUNCHER_MAX_DIR_DEPTH"
-		"-type" "d"
-	)
+	if $(hash fd 2>/dev/null) || $(hash fdfind 2>/dev/null); then
+		local find_opts=(
+			"--min-depth" "$ZELLIJ_LAUNCHER_MIN_DIR_DEPTH"
+			"--max-depth" "$ZELLIJ_LAUNCHER_MAX_DIR_DEPTH"
+			"--type" "d"
+		)
 
-	echo "$(find "${locations[@]}" "${find_opts[@]}")"
+		local roots=""
+		if [[ "$ZELLIJ_LAUNCHER_MIN_DIR_DEPTH" == 0 ]]; then
+			local IFS=$'\n'
+			roots="${locations[*]}"
+			local IFS=' '
+		fi
+
+		local cmd="fd"
+		if hash fdfind 2>/dev/null; then
+			cmd="fdfind"
+		fi
+		echo "$roots"$'\n'"$($cmd . "${locations[@]}" "${find_opts[@]}")"
+	else
+		local find_opts=(
+			"-mindepth" "$ZELLIJ_LAUNCHER_MIN_DIR_DEPTH"
+			"-maxdepth" "$ZELLIJ_LAUNCHER_MAX_DIR_DEPTH"
+			"-type" "d"
+		)
+
+		echo "$(find "${locations[@]}" "${find_opts[@]}")"
+	fi
 }
 
 zl_header_get() {
