@@ -251,6 +251,8 @@ zl_session_name() {
 
 # == MAIN FUNCTION ==
 zl() {
+	# go to alternate buffer (keep main buffer pretty)
+	echo -e "\e[?1049h\e[1;1H"
 	local $IFS
 	local save_ifs=$IFS
 	local prefix="$ZELLIJ_LAUNCHER_ACTION_PREFIX"
@@ -267,8 +269,11 @@ zl() {
 	local fzf_opts_text=("${fzf_opts_select[@]}" "--print-query" "--disabled")
 
 	while true; do
-		# clear screen
-		echo -e "\e[2J\e[0;0H"
+		# clear "Session detached" and "Bye from Zellij!"
+		echo -e "\e[F\e[2K\e[F"
+		# return to alternate buffer (exiting Zellij returns to main buffer)
+		echo -e "\e[?1049h"
+
 		# get sessions here bc we need to pass them to other functions
 		local sessions=($(zl_sessions_get))
 		recent_sessions=($(zl_array_intersect "${recent_sessions[*]}" "${sessions[*]}"))
@@ -462,4 +467,11 @@ zl() {
 		cd "$location" && zellij a -c "$name"
 		cd "$current_dir"
 	done
+
+	# return to main buffer
+	echo -e "\e[1049l\e[F"
+	echo "Exiting Zellij launcher"
+	if [[ ${#sessions[@]} -gt 0 ]]; then
+		echo "${#sessions[@]} session(s) still running"
+	fi
 }
