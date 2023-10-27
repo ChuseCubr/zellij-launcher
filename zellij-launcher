@@ -138,7 +138,7 @@ zl_sessions_get() {
 			continue
 		fi
 		sessions+=("$session")
-	done <<<"$(zellij ls)"
+	done <<<"$(zellij ls 2>/dev/null)"
 
 	echo "${sessions[*]}"
 }
@@ -151,7 +151,7 @@ zl_sessions_get_current() {
 			echo "${session/ (current)/}"
 			break
 		fi
-	done <<<"$(zellij ls)"
+	done <<<"$(zellij ls 2>/dev/null)"
 }
 
 zl_locations_get() {
@@ -267,6 +267,8 @@ zl() {
 	local fzf_opts_text=("${fzf_opts_select[@]}" "--print-query" "--disabled")
 
 	while true; do
+		# clear screen
+		echo -e "\e[2J\e[0;0H"
 		# get sessions here bc we need to pass them to other functions
 		local sessions=($(zl_sessions_get))
 		recent_sessions=($(zl_array_intersect "${recent_sessions[*]}" "${sessions[*]}"))
