@@ -6,6 +6,8 @@ A customizable launcher for [Zellij](https://github.com/zellij-org/zellij) inspi
 
 - [Zellij](https://github.com/zellij-org/zellij) (duh)
 - [fzf](https://github.com/junegunn/fzf)
+- [fd](https://github.com/sharkdp/fd) (optional)
+	- Faster `find`
 
 ## Installation and Usage
 
@@ -20,6 +22,12 @@ Source that file in your `~/.bashrc`:
 ```bash
 # ... your other stuff here
 source ~/.config/zellij/zellij-launcher
+```
+
+To run Zellij launcher, type simply run:
+
+```bash
+zl
 ```
 
 ## Settings and Customization
