@@ -272,7 +272,7 @@ zl() {
 		# clear "Session detached" and "Bye from Zellij!"
 		echo -e "\e[F\e[2K\e[F"
 		# return to alternate buffer (exiting Zellij returns to main buffer)
-		echo -e "\e[?1049h"
+		echo -e "\e[?1049h\e[1;1H"
 
 		# get sessions here bc we need to pass them to other functions
 		local sessions=($(zl_sessions_get))
