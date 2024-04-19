@@ -2,7 +2,7 @@
 
 A customizable launcher for [Zellij](https://github.com/zellij-org/zellij) inspired by [ThePrimeagen's tmux sessionizer](https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/scripts/tmux-sessionizer) and [alex35mil's zellij-runner](https://github.com/alex35mil/dotfiles/tree/master/user/bin/zellij/runner).
 
-Update: Zellij now has [a new welcome screen and a new file picker](https://github.com/zellij-org/zellij/releases/tag/v0.40.0)! Unless you need fuzzy finding, use those instead!
+Update: Zellij now has [a new welcome screen and a new file picker](https://github.com/zellij-org/zellij/releases/tag/v0.40.0)! Unless you need deep/nested fuzzy finding, use those instead!
 
 ## Dependencies
 
